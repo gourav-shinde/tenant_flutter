@@ -31,22 +31,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 // ignore: missing_return
-Future<Token>createToken(String username,String password) async{
-  final String LoginUrl="""
+Future<Token> createToken(String username, String password) async {
+  final String LoginUrl = """
 https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
-  final response = await http.post(LoginUrl,body:{
-    "username":username,
-    "password":password
-  });
+  final response = await http
+      .post(LoginUrl, body: {"username": username, "password": password});
 
-  if(response.statusCode <=202){
-    final String responseString =response.body;
+  if (response.statusCode <= 202) {
+    final String responseString = response.body;
     return tokenFromJson(responseString);
-  }
-  else{
+  } else {
     return null;
   }
-
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -56,44 +52,56 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Hello"),
       ),
       body: Container(
-        padding:EdgeInsets.all(32),
+        padding: EdgeInsets.all(32),
         child: Column(
           children: <Widget>[
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
-                labelText: "username",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                )
-              ),
+                  prefixIcon: Icon(Icons.account_box),
+                  labelText: "username",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  )),
+            ),
+            SizedBox(
+              height: 10,
             ),
             TextField(
               controller: passwordController,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.lock),
+                  labelText: "password",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  )),
             ),
-            SizedBox(height: 32,),
-            _token==null?Container():
-                Text("Token is ${_token.token} is received"),
+            SizedBox(
+              height: 32,
+            ),
+            _token == null
+                ? Container()
+                : Text("Token is ${_token.token} is received"),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
-          final String username =usernameController.text;
-          final String password=passwordController.text;
-          final Token token =await createToken(username, password);
+        onPressed: () async {
+          final String username = usernameController.text;
+          final String password = passwordController.text;
+          final Token token = await createToken(username, password);
           setState(() {
-            _token=token;
+            _token = token;
           });
-
         },
-
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
