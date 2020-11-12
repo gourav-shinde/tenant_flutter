@@ -69,7 +69,7 @@ class AddTenantViewState extends State<AddTenantView> {
             ),
             // Text(_dateTime == null ? "Nothing selected" : _dateTime.toString()),
             DateTimeField(
-              format: DateFormat("dd-MM-yyyy"),
+              format: DateFormat("yyyy-MM--dd"),
               // enabled: false,
               initialValue: DateTime.now(),
               controller: dateIscontroller,

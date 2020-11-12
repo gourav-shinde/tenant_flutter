@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/screens/add_tenant.dart';
@@ -9,49 +11,37 @@ import 'package:tenant_manager/main.dart';
 import 'package:tenant_manager/models/tenant_model.dart';
 
 class TenantView extends StatefulWidget {
+  String Token_recieved;
+  TenantView(this.Token_recieved);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return TenantViewState();
+    return TenantViewState(Token_recieved);
   }
 }
 
 Future<List<Tenant>> createList(String Token_saved) async {
+  print(Token_saved);
   final String LoginUrl = """
 https://tenant-manager-arsenel.herokuapp.com/app/tenant_views""";
-  print("TOKEN $Token_saved");
+  print("TOKEN $Token_saved hello");
   String header = "TOKEN " + "$Token_saved";
   print(header);
   final response = await http.get(LoginUrl, headers: {"Authorization": header});
-  var JsonData = response.body;
-  print(JsonData);
+  var JsonData = jsonDecode(response.body);
+  print(JsonData["tenants"]);
+  List<Tenant> tenants = [];
+  for (var u in JsonData["tenants"]) {
+    Tenant obj = Tenant(u["id"], u["name"], u["mobile_no"], u["start_date"],
+        u["deposite"], u["room_name"], u["balance"]);
+    tenants.add(obj);
+  }
+  return tenants;
 }
 
 class TenantViewState extends State<TenantView> {
-  static String Token_saved;
-  @override
-  void initState() {
-    getToken();
-    print("Print $Token_saved");
-  }
-
-  getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      Token_saved = prefs.getString("token");
-    });
-    print("$Token_saved");
-    if (Token_saved == null) {
-      Navigator.pop(context);
-      Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return MyHomePage();
-      }));
-    } else {
-      createList(Token_saved);
-    }
-  }
-
-  //to delete token in
+  String Token_saved;
+  TenantViewState(this.Token_saved);
   resettoken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", null);
@@ -80,27 +70,27 @@ class TenantViewState extends State<TenantView> {
         ],
       ),
       body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text("Tenant 1"),
-            ),
-            ListTile(
-              title: Text("Tenant 2"),
-            ),
-            ListTile(
-              title: Text("Tenant 3"),
-            ),
-            ListTile(
-              title: Text("Tenant 4"),
-            ),
-            ListTile(
-              title: Text("Tenant 5"),
-            ),
-          ],
-        ),
-      ),
+          padding: EdgeInsets.all(10),
+          child: FutureBuilder(
+            future: createList(Token_saved),
+            builder: (context, snapshot) {
+              if (snapshot.data == null) {
+                return Container(
+                  child: Center(
+                    child: Text("Loading"),
+                  ),
+                );
+              } else
+                return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(snapshot.data[index].name),
+                    );
+                  },
+                );
+            },
+          )),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
