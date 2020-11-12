@@ -86,6 +86,12 @@ class TenantViewState extends State<TenantView> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(snapshot.data[index].name),
+                      trailing: Text(snapshot.data[index].balance.toString()),
+                      onTap: () {
+                        var balance = snapshot.data[index].balance;
+                        print(snapshot.data[index].name);
+                        print(balance);
+                      },
                     );
                   },
                 );
