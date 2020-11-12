@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(),
+      debugShowCheckedModeBanner: false,
       // home: MyHomePage(title: 'Tenant Manager'),
     );
   }
@@ -57,12 +58,11 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
 
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
+  bool _loading=false;
   Token _token;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  static String Token_saved="hello";
+  static String Token_saved;
   @override
   void initState(){
     getToken();
@@ -89,6 +89,9 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.all(32),
         child: Column(
           children: <Widget>[
+            _loading ? LinearProgressIndicator(
+
+            ):Container(),
             SizedBox(
               height: 190,
             ),
@@ -127,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 textScaleFactor: 1.5,
               ),
               onPressed: () async {
+                _loading=true;
                 final String username = usernameController.text;
                 final String password = passwordController.text;
                 final Token token = await createToken(username, password);
@@ -134,6 +138,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {
                   _token = token;
                 });
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return TenantView();
+                }));
               },
             ),
             SizedBox(

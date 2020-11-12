@@ -107,6 +107,7 @@ class AddTenantViewState extends State<AddTenantView> {
                 child: Text("Create Tenant"),
                 onPressed: () {
                   print("Create");
+                  Navigator.pop(context);
                 }),
             RaisedButton(
                 child: Text("Cancel"),
