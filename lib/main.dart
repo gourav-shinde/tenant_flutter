@@ -3,6 +3,9 @@ import 'package:tenant_manager/Register_view.dart';
 import 'package:tenant_manager/tokenModel.dart';
 import 'package:http/http.dart' as http;
 
+// screens
+import 'package:tenant_manager/screens/logged_sandbox.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -53,13 +56,13 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Hello"),
-      ),
       body: Container(
         padding: EdgeInsets.all(32),
         child: Column(
           children: <Widget>[
+            SizedBox(
+              height: 190,
+            ),
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
@@ -85,23 +88,41 @@ class _MyHomePageState extends State<MyHomePage> {
                   )),
             ),
             SizedBox(
+              height: 10,
+            ),
+            RaisedButton(
+              color: Theme.of(context).primaryColorDark,
+              textColor: Theme.of(context).primaryColorLight,
+              child: Text(
+                "Login",
+                textScaleFactor: 1.5,
+              ),
+              onPressed: () async {
+                final String username = usernameController.text;
+                final String password = passwordController.text;
+                final Token token = await createToken(username, password);
+                setState(() {
+                  _token = token;
+                });
+              },
+            ),
+            SizedBox(
               height: 32,
             ),
             _token == null
                 ? Container()
                 : Text("Token is ${_token.token} is received"),
+            FlatButton(
+              color: Colors.white,
+              textColor: Colors.black,
+              onPressed: () {
+                print("pressed");
+                Navigator.pop(context);
+              },
+              child: Text("Create An Account? Sign UP"),
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final String username = usernameController.text;
-          final String password = passwordController.text;
-          final Token token = await createToken(username, password);
-          setState(() {
-            _token = token;
-          });
-        },
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
