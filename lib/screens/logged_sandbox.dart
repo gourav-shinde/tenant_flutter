@@ -35,7 +35,7 @@ class TenantViewState extends State<TenantView> {
     createList(Token_saved);
   }
 
-  getToken() async {
+  Future<String> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       Token_saved = prefs.getString("token");
