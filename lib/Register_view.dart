@@ -148,10 +148,8 @@ class RegisterState extends State<Register> {
               color: Colors.white,
               textColor: Colors.black,
               onPressed: () {
-                print("pressed");
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return MyHomePage();
-                }));
+                print("pressed (pop)");
+                Navigator.pop(context);
               },
               child: Text("Already an Account? Sign In"),
             )

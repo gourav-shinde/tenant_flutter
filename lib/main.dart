@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/Register_view.dart';
 import 'package:tenant_manager/tokenModel.dart';
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Register(),
+      home: MyHomePage(),
       // home: MyHomePage(title: 'Tenant Manager'),
     );
   }
@@ -35,6 +37,7 @@ class MyHomePage extends StatefulWidget {
 
 // ignore: missing_return
 Future<Token> createToken(String username, String password) async {
+
   final String LoginUrl = """
 https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
   final response = await http
@@ -42,17 +45,43 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
 
   if (response.statusCode <= 202) {
     final String responseString = response.body;
+    SharedPreferences prefs =await SharedPreferences.getInstance();
+    var JsonResponse=jsonDecode(responseString);
+    prefs.setString("token", JsonResponse["token"]);
     return tokenFromJson(responseString);
   } else {
     return null;
   }
 }
 
+
+
 class _MyHomePageState extends State<MyHomePage> {
+
+
   Token _token;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  static String Token_saved="hello";
+  @override
+  void initState(){
+    getToken();
+  }
+  getToken()async{
+    SharedPreferences prefs =await SharedPreferences.getInstance();
+    setState(() {
+      Token_saved = prefs.getString("token");
+    });
+    print("$Token_saved");
+    if(Token_saved!=null){
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return TenantView();
+      }));
 
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 final String username = usernameController.text;
                 final String password = passwordController.text;
                 final Token token = await createToken(username, password);
+                print("received");
                 setState(() {
                   _token = token;
                 });
@@ -109,6 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: 32,
             ),
+            Token_saved ==null?Container():Text("$Token_saved is saved already"),
             _token == null
                 ? Container()
                 : Text("Token is ${_token.token} is received"),
@@ -116,8 +147,10 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Colors.white,
               textColor: Colors.black,
               onPressed: () {
-                print("pressed");
-                Navigator.pop(context);
+                print("pressed (push)");
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return Register();
+                }));
               },
               child: Text("Create An Account? Sign UP"),
             )
