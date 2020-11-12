@@ -32,10 +32,10 @@ class TenantViewState extends State<TenantView> {
   @override
   void initState() {
     getToken();
-    createList(Token_saved);
+    print("Print $Token_saved");
   }
 
-  Future<String> getToken() async {
+  getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       Token_saved = prefs.getString("token");
@@ -46,6 +46,8 @@ class TenantViewState extends State<TenantView> {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return MyHomePage();
       }));
+    } else {
+      createList(Token_saved);
     }
   }
 
