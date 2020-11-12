@@ -38,7 +38,6 @@ class MyHomePage extends StatefulWidget {
 
 // ignore: missing_return
 Future<Token> createToken(String username, String password) async {
-
   final String LoginUrl = """
 https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
   final response = await http
@@ -46,8 +45,8 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
 
   if (response.statusCode <= 202) {
     final String responseString = response.body;
-    SharedPreferences prefs =await SharedPreferences.getInstance();
-    var JsonResponse=jsonDecode(responseString);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var JsonResponse = jsonDecode(responseString);
     prefs.setString("token", JsonResponse["token"]);
     return tokenFromJson(responseString);
   } else {
@@ -55,33 +54,31 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
   }
 }
 
-
-
 class _MyHomePageState extends State<MyHomePage> {
-  bool _loading=false;
+  bool _loading = false;
   Token _token;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   static String Token_saved;
   @override
-  void initState(){
+  void initState() {
     getToken();
   }
-  getToken()async{
-    SharedPreferences prefs =await SharedPreferences.getInstance();
+
+  getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       Token_saved = prefs.getString("token");
     });
     print("$Token_saved");
-    if(Token_saved!=null){
+    if (Token_saved != null) {
       Navigator.pop(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
         return TenantView();
       }));
-
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,9 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.all(32),
         child: Column(
           children: <Widget>[
-            _loading ? LinearProgressIndicator(
-
-            ):Container(),
+            _loading ? LinearProgressIndicator() : Container(),
             SizedBox(
               height: 190,
             ),
@@ -130,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 textScaleFactor: 1.5,
               ),
               onPressed: () async {
-                _loading=true;
+                _loading = true;
                 final String username = usernameController.text;
                 final String password = passwordController.text;
                 final Token token = await createToken(username, password);
@@ -147,7 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
             SizedBox(
               height: 32,
             ),
-            Token_saved ==null?Container():Text("$Token_saved is saved already"),
+            Token_saved == null
+                ? Container()
+                : Text("$Token_saved is saved already"),
             _token == null
                 ? Container()
                 : Text("Token is ${_token.token} is received"),

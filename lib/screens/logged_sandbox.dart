@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/screens/add_tenant.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tenant_manager/main.dart';
+
+//models
+import 'package:tenant_manager/models/tenant_model.dart';
 
 class TenantView extends StatefulWidget {
   @override
@@ -13,11 +16,43 @@ class TenantView extends StatefulWidget {
   }
 }
 
+Future<List<Tenant>> createList(String Token_saved) async {
+  final String LoginUrl = """
+https://tenant-manager-arsenel.herokuapp.com/app/tenant_views""";
+  print("TOKEN $Token_saved");
+  String header = "TOKEN " + "$Token_saved";
+  print(header);
+  final response = await http.get(LoginUrl, headers: {"Authorization": header});
+  var JsonData = response.body;
+  print(JsonData);
+}
+
 class TenantViewState extends State<TenantView> {
-  resettoken()async {
-    print("hello");
-    SharedPreferences prefs =await SharedPreferences.getInstance();
-    prefs.setString("token",null);
+  static String Token_saved;
+  @override
+  void initState() {
+    getToken();
+    createList(Token_saved);
+  }
+
+  getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      Token_saved = prefs.getString("token");
+    });
+    print("$Token_saved");
+    if (Token_saved == null) {
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return MyHomePage();
+      }));
+    }
+  }
+
+  //to delete token in
+  resettoken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("token", null);
     print("cleared variable");
   }
 
@@ -29,7 +64,7 @@ class TenantViewState extends State<TenantView> {
         title: Text("Tenants"),
         actions: <Widget>[
           FlatButton(
-              onPressed: (){
+            onPressed: () {
               print("Logout");
               resettoken();
               Navigator.pop(context);
@@ -37,8 +72,8 @@ class TenantViewState extends State<TenantView> {
                 return MyHomePage();
               }));
               print("cleared");
-              },
-              child: Icon(Icons.logout),
+            },
+            child: Icon(Icons.logout),
           )
         ],
       ),
