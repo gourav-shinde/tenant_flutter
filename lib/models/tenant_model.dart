@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-class Tenant{
+class Tenant {
   int id;
   String name;
   String mobileNo;
-  DateTime startDate;
+  String startDate;
   int deposite;
   String roomName;
   int balance;
 
-  Tenant({
+  Tenant(
     this.id,
     this.name,
     this.mobileNo,
@@ -17,6 +17,5 @@ class Tenant{
     this.deposite,
     this.roomName,
     this.balance,
-  });
-
+  );
 }

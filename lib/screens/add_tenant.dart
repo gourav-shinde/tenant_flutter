@@ -2,12 +2,40 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../models/addTenant_model.dart';
+import 'package:http/http.dart' as http;
+
+import 'logged_sandbox.dart';
 
 class AddTenantView extends StatefulWidget {
+  String Token_recieved;
+  AddTenantView(this.Token_recieved);
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return AddTenantViewState();
+    return AddTenantViewState(Token_recieved);
+  }
+}
+
+Future<AddTenant> addTenant(String name, String mobile, String depos, String room, String date,String Token_saved) async {
+  print(Token_saved);
+  final apiUrl = "https://tenant-manager-arsenel.herokuapp.com/app/tenant_views";
+  String header = "TOKEN " + "$Token_saved";
+  print(header);
+  final addedResponse = await http.post(apiUrl,headers: {"Authorization": header}, body: {
+    "name": name,
+    "mobile_no": mobile,
+    "start_date": date,
+    "deposite": depos,
+    "room_name": room,
+  });
+
+  if (addedResponse.statusCode <= 202) {
+    final String addedString = addedResponse.body;
+
+    return addTenantFromJson(addedString);
+  } else {
+    print(addedResponse.body);
   }
 }
 
@@ -18,6 +46,11 @@ class AddTenantViewState extends State<AddTenantView> {
   final TextEditingController roomcontroller = TextEditingController();
   final TextEditingController dateIscontroller = TextEditingController();
 
+  String Token_saved;
+  AddTenantViewState(this.Token_saved);
+
+  AddTenant _addTenant;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -27,7 +60,7 @@ class AddTenantViewState extends State<AddTenantView> {
       ),
       body: Container(
         padding: EdgeInsets.all(32),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             TextField(
               controller: nameController,
@@ -69,7 +102,7 @@ class AddTenantViewState extends State<AddTenantView> {
             ),
             // Text(_dateTime == null ? "Nothing selected" : _dateTime.toString()),
             DateTimeField(
-              format: DateFormat("dd-MM-yyyy"),
+              format: DateFormat("yyyy-MM-dd"),
               // enabled: false,
               initialValue: DateTime.now(),
               controller: dateIscontroller,
@@ -105,9 +138,23 @@ class AddTenantViewState extends State<AddTenantView> {
             ),
             RaisedButton(
                 child: Text("Create Tenant"),
-                onPressed: () {
-                  print("Create");
+                onPressed: () async {
+                  final String name = nameController.text;
+                  final String mobile = mobileController.text;
+                  final String deposite = depositeController.text;
+                  final String date = dateIscontroller.text;
+                  final String room_name = roomcontroller.text;
+                  print(name);
+                  print(mobile);
+                  print(deposite);
+                  print(date);
+                  print(room_name);
+                  final AddTenant added = await addTenant(name, mobile, deposite, room_name, date,Token_saved);
                   Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return TenantView(Token_saved);
+                  }));
                 }),
             RaisedButton(
                 child: Text("Cancel"),

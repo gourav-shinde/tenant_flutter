@@ -42,7 +42,6 @@ Future<Token> createToken(String username, String password) async {
 https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
   final response = await http
       .post(LoginUrl, body: {"username": username, "password": password});
-
   if (response.statusCode <= 202) {
     final String responseString = response.body;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Token _token;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  static String Token_saved;
+  String Token_saved;
   @override
   void initState() {
     getToken();
@@ -74,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (Token_saved != null) {
       Navigator.pop(context);
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return TenantView();
+        return TenantView(Token_saved);
       }));
     }
   }
@@ -132,11 +131,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 print("received");
                 setState(() {
                   _token = token;
+                  Token_saved = _token.token;
                 });
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return TenantView();
-                }));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => TenantView(Token_saved)));
               },
             ),
             SizedBox(
