@@ -25,10 +25,10 @@ class add_bill_state extends State<add_bill_payment> {
     return Scaffold(
       appBar: _isbill
           ? AppBar(
-              title: Text("Add bill to" + tenant_instance.name),
+              title: Text("Add bill to " + tenant_instance.name),
             )
           : AppBar(
-              title: Text("Add Payment to" + tenant_instance.name),
+              title: Text("Add Payment to " + tenant_instance.name),
             ),
       body: Container(
         padding: EdgeInsets.all(35),

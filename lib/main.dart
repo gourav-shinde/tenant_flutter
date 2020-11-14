@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/Register_view.dart';
-import 'package:tenant_manager/tokenModel.dart';
 import 'package:http/http.dart' as http;
 
 // screens
@@ -148,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Token_saved == null
                 ? Container()
                 : Text("$Token_saved is saved already"),
-            _error == null ? Container() : Text("invald Credentials"),
+            _error == null ? Container() : Text("Invalid Credentials"),
             FlatButton(
               color: Colors.white,
               textColor: Colors.black,
