@@ -37,7 +37,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 // ignore: missing_return
-Future<Token> createToken(String username, String password) async {
+Future<String> createToken(String username, String password) async {
   final String LoginUrl = """
 https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
   final response = await http
@@ -47,18 +47,19 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/login""";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var JsonResponse = jsonDecode(responseString);
     prefs.setString("token", JsonResponse["token"]);
-    return tokenFromJson(responseString);
+    return JsonResponse["token"];
   } else {
-    return null;
+    print(response.body);
+    return "error";
   }
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   bool _loading = false;
-  Token _token;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String Token_saved;
+  String _error;
   @override
   void initState() {
     getToken();
@@ -127,15 +128,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 _loading = true;
                 final String username = usernameController.text;
                 final String password = passwordController.text;
-                final Token token = await createToken(username, password);
+                final String token = await createToken(username, password);
                 print("received");
+                _loading = false;
                 setState(() {
-                  _token = token;
-                  Token_saved = _token.token;
+                  if (token != "error") {
+                    Token_saved = token;
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => TenantView(Token_saved)));
+                  } else {
+                    _error = "error";
+                  }
                 });
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => TenantView(Token_saved)));
               },
             ),
             SizedBox(
@@ -144,9 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Token_saved == null
                 ? Container()
                 : Text("$Token_saved is saved already"),
-            _token == null
-                ? Container()
-                : Text("Token is ${_token.token} is received"),
+            _error == null ? Container() : Text("invald Credentials"),
             FlatButton(
               color: Colors.white,
               textColor: Colors.black,

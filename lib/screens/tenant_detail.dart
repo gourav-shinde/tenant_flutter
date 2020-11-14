@@ -6,6 +6,7 @@ import 'package:tenant_manager/models/bill_model.dart';
 import 'package:tenant_manager/models/payment_model.dart';
 
 import 'package:tenant_manager/models/tenant_model.dart';
+import 'package:tenant_manager/screens/add_bill_payment.dart';
 
 class Tenant_detail extends StatefulWidget {
   Tenant tenant_instance;
@@ -255,6 +256,9 @@ class tenant_detail_state extends State<Tenant_detail> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           print("add");
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return add_bill_payment(tenant_instance, token_saved, _isbill);
+          }));
         },
         child: Icon(Icons.add),
       ),
