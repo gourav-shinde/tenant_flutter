@@ -23,84 +23,107 @@ class add_bill_state extends State<add_bill_payment> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: _isbill
-          ? AppBar(
-              title: Text("Add bill to " + tenant_instance.name),
-            )
-          : AppBar(
-              title: Text("Add Payment to " + tenant_instance.name),
-            ),
-      body: Container(
-        padding: EdgeInsets.all(35),
-        child: Column(
-          children: [
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "rent",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "Electricity units",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "price per units",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "water bill",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "wifi charges",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            RaisedButton(
-              onPressed: () {},
-              child: Text("CreateBill"),
-            ),
-          ],
-        ),
-      ),
-    );
+        appBar: _isbill
+            ? AppBar(
+                title: Text("Add bill to " + tenant_instance.name),
+              )
+            : AppBar(
+                title: Text("Add Payment to " + tenant_instance.name),
+              ),
+        body: _isbill
+            ? Container(
+                padding: EdgeInsets.all(35),
+                child: Column(
+                  children: [
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          labelText: "rent",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          labelText: "Electricity units",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          labelText: "price per units",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          labelText: "water bill",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          labelText: "wifi charges",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    RaisedButton(
+                      onPressed: () {},
+                      child: Text("Create Bill"),
+                    ),
+                  ],
+                ),
+              )
+            : Container(
+                padding: EdgeInsets.all(35),
+                child: Column(
+                  children: [
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.account_box),
+                          labelText: "Amount",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    RaisedButton(
+                      onPressed: () {},
+                      child: Text("Add Payment"),
+                    )
+                  ],
+                ),
+              ));
   }
 }
