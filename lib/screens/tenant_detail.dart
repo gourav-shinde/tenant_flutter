@@ -83,35 +83,35 @@ class tenant_detail_state extends State<Tenant_detail> {
       body: Container(
         child: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(15),
-              height: 175,
-              width: double.infinity,
-              color: Colors.grey[100],
-              child: Column(
-                children: [
-                  Text(
-                    tenant_instance.name,
-                    style: TextStyle(fontSize: 40),
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    "Mobile No : " + tenant_instance.mobileNo.toString(),
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(tenant_instance.roomName),
-                  Text("Deposite : " + tenant_instance.deposite.toString()),
-                  Text("Check in : " + tenant_instance.startDate.toString()),
-                  tenant_instance.balance >= 0
-                      ? Text(
-                          tenant_instance.balance.toString(),
-                          style: TextStyle(color: Colors.green, fontSize: 25),
-                        )
-                      : Text(
-                          tenant_instance.balance.toString(),
-                          style: TextStyle(color: Colors.red, fontSize: 25),
-                        ),
-                ],
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                width: double.infinity,
+                color: Colors.grey[100],
+                child: Column(
+                  children: [
+                    Text(
+                      tenant_instance.name,
+                      style: TextStyle(fontSize: 40),
+                    ),
+                    Text(
+                      "Mobile No : " + tenant_instance.mobileNo.toString(),
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Text(tenant_instance.roomName),
+                    Text("Deposite : " + tenant_instance.deposite.toString()),
+                    Text("Check in : " + tenant_instance.startDate.toString()),
+                    tenant_instance.balance >= 0
+                        ? Text(
+                            tenant_instance.balance.toString(),
+                            style: TextStyle(color: Colors.green, fontSize: 25),
+                          )
+                        : Text(
+                            tenant_instance.balance.toString(),
+                            style: TextStyle(color: Colors.red, fontSize: 25),
+                          ),
+                  ],
+                ),
               ),
             ),
             _isbill
