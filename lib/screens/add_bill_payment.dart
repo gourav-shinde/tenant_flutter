@@ -19,6 +19,13 @@ class add_bill_state extends State<add_bill_payment> {
   Tenant tenant_instance;
   bool _isbill;
   add_bill_state(this.tenant_instance, this.token_saved, this._isbill);
+  final TextEditingController rentController = TextEditingController();
+  final TextEditingController unitnameController = TextEditingController();
+  final TextEditingController price_pernameController = TextEditingController();
+  final TextEditingController water_Controller = TextEditingController();
+  final TextEditingController wifiController = TextEditingController();
+  final TextEditingController ammountController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build

@@ -92,11 +92,19 @@ class TenantViewState extends State<TenantView> {
                         var balance = snapshot.data[index].balance;
                         print(snapshot.data[index].name);
                         print(balance);
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return Tenant_detail(
-                              snapshot.data[index], Token_saved);
-                        }));
+                        // Navigator.push(context,
+                        //     MaterialPageRoute(builder: (context) {
+                        //   return Tenant_detail(
+                        //       snapshot.data[index], Token_saved);
+                        // }));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Tenant_detail(
+                                  snapshot.data[index], Token_saved)),
+                        ).then((value) => setState(() {
+                              print("hello");
+                            }));
                       },
                     );
                   },
