@@ -109,7 +109,10 @@ class tenant_detail_state extends State<Tenant_detail> {
                           )
                         : Text(
                             tenant_instance.balance.toString(),
-                            style: TextStyle(color: Colors.red, fontSize: 25),
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 25,
+                            ),
                           ),
                   ],
                 ),
