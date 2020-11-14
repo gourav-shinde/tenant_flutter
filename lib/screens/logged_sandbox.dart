@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/screens/add_tenant.dart';
+import 'package:tenant_manager/screens/tenant_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tenant_manager/main.dart';
@@ -91,6 +92,11 @@ class TenantViewState extends State<TenantView> {
                         var balance = snapshot.data[index].balance;
                         print(snapshot.data[index].name);
                         print(balance);
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return Tenant_detail(
+                              snapshot.data[index], Token_saved);
+                        }));
                       },
                     );
                   },
