@@ -52,107 +52,136 @@ class RegisterState extends State<Register> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController Repassword1Controller = TextEditingController();
+
+  bool _showPassword = false;
+  bool _showRePassword = false;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(32),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 190,
-            ),
-            TextField(
-              controller: usernameController,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "username",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email),
-                  labelText: "Email",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              controller: passwordController,
-              decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock),
-                  labelText: "password",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            TextField(
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              controller: Repassword1Controller,
-              decoration: InputDecoration(
-                  labelText: "Re password",
-                  prefixIcon: Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  )),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            RaisedButton(
-              color: Theme.of(context).primaryColorDark,
-              textColor: Theme.of(context).primaryColorLight,
-              child: Text(
-                "Register",
-                textScaleFactor: 1.5,
-              ),
-              onPressed: () async {
-                final String username = usernameController.text;
-                final String email = emailController.text;
-                final String password = passwordController.text;
-                final String password2 = Repassword1Controller.text;
-                final String response =
-                    await registerOn(username, email, password, password2);
+      body: Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Form(
+            // padding: EdgeInsets.all(32),
+            child: ListView(
+              children: <Widget>[
+                SizedBox(
+                  height: 190,
+                ),
+                TextField(
+                  controller: usernameController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.account_box),
+                      labelText: "username",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      )),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.email),
+                      labelText: "Email",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      )),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: passwordController,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock),
+                      labelText: "password",
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showPassword = !_showPassword;
+                          });
+                        },
+                        child: Icon(
+                          _showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      )),
+                  obscureText: !_showPassword,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  controller: Repassword1Controller,
+                  decoration: InputDecoration(
+                      labelText: "Re password",
+                      prefixIcon: Icon(Icons.lock_outline),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _showRePassword = !_showRePassword;
+                          });
+                        },
+                        child: Icon(
+                          _showRePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      )),
+                  obscureText: !_showRePassword,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                RaisedButton(
+                  color: Theme.of(context).primaryColorDark,
+                  textColor: Theme.of(context).primaryColorLight,
+                  child: Text(
+                    "Register",
+                    textScaleFactor: 1.5,
+                  ),
+                  onPressed: () async {
+                    final String username = usernameController.text;
+                    final String email = emailController.text;
+                    final String password = passwordController.text;
+                    final String password2 = Repassword1Controller.text;
+                    final String response =
+                        await registerOn(username, email, password, password2);
 
-                setState(() {
-                  response_output = response;
-                });
-              },
+                    setState(() {
+                      response_output = response;
+                    });
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                response_output == null ? Container() : Text(response_output),
+                FlatButton(
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  onPressed: () {
+                    print("pressed (pop)");
+                    Navigator.pop(context);
+                  },
+                  child: Text("Already an Account? Sign In"),
+                )
+              ],
             ),
-            SizedBox(
-              height: 10,
-            ),
-            response_output == null ? Container() : Text(response_output),
-            FlatButton(
-              color: Colors.white,
-              textColor: Colors.black,
-              onPressed: () {
-                print("pressed (pop)");
-                Navigator.pop(context);
-              },
-              child: Text("Already an Account? Sign In"),
-            )
-          ],
-        ),
-      ),
+          )),
     );
   }
 }

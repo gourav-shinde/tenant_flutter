@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/Register_view.dart';
 import 'package:http/http.dart' as http;
+import 'package:tenant_manager/screens/change_password.dart';
 
 // screens
 import 'package:tenant_manager/screens/logged_sandbox.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
   final String title;
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -59,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final TextEditingController passwordController = TextEditingController();
   String Token_saved;
   String _error;
+  bool _showPassword = false;
+
   @override
   void initState() {
     getToken();
@@ -81,9 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(32),
-        child: Column(
+        body: Padding(
+      padding: EdgeInsets.all(32.0),
+      child: Container(
+        child: ListView(
           children: <Widget>[
             _loading ? LinearProgressIndicator() : Container(),
             SizedBox(
@@ -93,7 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
               controller: usernameController,
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.account_box),
-                  labelText: "username",
+                  labelText: "Username",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   )),
@@ -103,15 +108,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextField(
               controller: passwordController,
-              obscureText: true,
               enableSuggestions: false,
               autocorrect: false,
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.lock),
-                  labelText: "password",
+                  labelText: "Password",
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                    child: Icon(
+                      _showPassword ? Icons.visibility : Icons.visibility_off,
+                    ),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   )),
+              obscureText: !_showPassword,
             ),
             SizedBox(
               height: 10,
@@ -133,7 +148,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {
                   if (token != "error") {
                     Token_saved = token;
-                    Navigator.pop(context);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => TenantView(Token_saved)));
                   } else {
@@ -142,8 +156,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
             ),
+            FlatButton(
+              textColor: Colors.black,
+              onPressed: () {
+                print("pressed (push)");
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return ChangePassword();
+                }));
+              },
+              child: Text(
+                "Forget Password/Username",
+                textScaleFactor: 0.8,
+              ),
+            ),
             SizedBox(
-              height: 32,
+              height: 10,
             ),
             Token_saved == null
                 ? Container()
@@ -163,6 +190,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    ));
   }
 }
