@@ -133,6 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {
                   if (token != "error") {
                     Token_saved = token;
+                    Navigator.pop(context);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => TenantView(Token_saved)));
                   } else {
