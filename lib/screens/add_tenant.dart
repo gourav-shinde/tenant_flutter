@@ -52,8 +52,7 @@ class AddTenantViewState extends State<AddTenantView> {
   AddTenant _addTenant;
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
+  Widget build(BuildContext context) { 
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Tenant"),
@@ -65,8 +64,8 @@ class AddTenantViewState extends State<AddTenantView> {
             TextField(
               controller: nameController,
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "username",
+                  prefixIcon: Icon(Icons.person),
+                  labelText: "Username",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   )),
@@ -78,8 +77,8 @@ class AddTenantViewState extends State<AddTenantView> {
               controller: mobileController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
-                  labelText: "Mobile no",
+                  prefixIcon: Icon(Icons.phone_android),
+                  labelText: "Mobile no.",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   )),
@@ -91,7 +90,7 @@ class AddTenantViewState extends State<AddTenantView> {
               controller: depositeController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
+                  prefixIcon: Icon(Icons.attach_money),
                   labelText: "Deposite",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
@@ -115,7 +114,7 @@ class AddTenantViewState extends State<AddTenantView> {
                     lastDate: DateTime(2100));
               },
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
+                  prefixIcon: Icon(Icons.calendar_today),
                   labelText: "Date",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
@@ -127,7 +126,7 @@ class AddTenantViewState extends State<AddTenantView> {
             TextField(
               controller: roomcontroller,
               decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.account_box),
+                  prefixIcon: Icon(Icons.meeting_room),
                   labelText: "Room Name",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
