@@ -7,6 +7,8 @@ import 'package:tenant_manager/models/payment_model.dart';
 
 import 'package:tenant_manager/models/tenant_model.dart';
 import 'package:tenant_manager/screens/add_bill_payment.dart';
+import 'package:tenant_manager/screens/bill_detail.dart';
+import 'package:tenant_manager/screens/edit_tenant.dart';
 
 class Tenant_detail extends StatefulWidget {
   Tenant tenant_instance;
@@ -77,6 +79,9 @@ class tenant_detail_state extends State<Tenant_detail> {
           FlatButton(
               onPressed: () {
                 print("edit pressed");
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        editTenant(token_saved, tenant_instance)));
               },
               child: Icon(Icons.edit))
         ],
@@ -219,6 +224,11 @@ class tenant_detail_state extends State<Tenant_detail> {
                                         snapshot.data[index].total.toString()),
                                     onTap: () {
                                       print("pressed");
+                                      print(snapshot.data[index].total);
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) => billDetail(
+                                                  snapshot.data[index])));
                                     },
                                   );
                                 },
