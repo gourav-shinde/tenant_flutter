@@ -56,7 +56,7 @@ class billDetailState extends State<billDetail> {
               SizedBox(
                 height: 10,
               ),
-              Text("Wifi Charges : " + bill_instance.total.toString()),
+              Text("Total : " + bill_instance.total.toString()),
               SizedBox(
                 height: 10,
               ),
