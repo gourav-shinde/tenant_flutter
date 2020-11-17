@@ -1,16 +1,27 @@
-# tenant_manager
+# Tenant Manager(Arsenel) 
 
-A new Flutter application.
+Android Flutter Application with Django rest API. 
 
-## Getting Started
+## Introduction
 
-This project is a starting point for a Flutter application.
+This Application is designed for House owners/hostels,etc who give rooms for Rents. 
 
-A few resources to get you started if this is your first Flutter project:
+APP url:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Contributers: 
+- Gaurav Shinde(gauravsanjayshinde@gmail.com) 
+- Shreyash Pawar(pawarshreyash2908@gmail.com) 
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Functionality
+
+- Add Tenant/PG
+- Generate separate bills for tenants with details
+- Maintain Record of Payments of each tenants.
+- Shows Extra or pending credits of each tenants.
+- Send Bills and payments acknowledgement to tenants.
+- Maintain records of Tenants
+
+## Additional Functionality
+- Email verification
+- Reset password
+- Get forgotten username on registered email. 
