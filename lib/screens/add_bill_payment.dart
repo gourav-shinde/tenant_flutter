@@ -1,12 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tenant_manager/models/add_bill.dart';
-import 'package:tenant_manager/models/add_payment.dart';
 import 'package:tenant_manager/models/tenant_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:tenant_manager/main.dart';
 
 class add_bill_payment extends StatefulWidget {
   String token_saved;
@@ -20,12 +17,15 @@ class add_bill_payment extends StatefulWidget {
   }
 }
 
-Future<AddBill> addBill(Tenant tenant_instance, String token_saved, String rent,String units, String perUnit, String water, String wifi) async {
+Future<int> addBill(Tenant tenant_instance, String token_saved, String rent,
+    String units, String perUnit, String water, String wifi) async {
   final String billUrl =
       "https://tenant-manager-arsenel.herokuapp.com/app/bill_views/" +
           tenant_instance.id.toString();
   String header = "TOKEN " + "$token_saved";
-  final response = await http.post(billUrl, headers: {"Authorization": header}, body: {
+  final response = await http.post(billUrl, headers: {
+    "Authorization": header
+  }, body: {
     "rent": rent,
     "units": units,
     "price_per_unit": perUnit,
@@ -33,33 +33,38 @@ Future<AddBill> addBill(Tenant tenant_instance, String token_saved, String rent,
     "wifi_charge": wifi,
   });
 
-  if (response.statusCode <=202) {
+  if (response.statusCode <= 202) {
     final String responseString = response.body;
-    print(response.body);
-    return addBillFromJson(responseString);
-  }else{
+    var jsonResponse = jsonDecode(responseString);
+    return jsonResponse['total'];
+  } else {
     print("Error");
+    return null;
   }
 }
 
-Future<AddPayment> addPayment(Tenant tenant_instance, String token_saved, String amount) async {
+Future<int> addPayment(
+    Tenant tenant_instance, String token_saved, String amount) async {
   final String payUrl =
       "https://tenant-manager-arsenel.herokuapp.com/app/payment_views/" +
           tenant_instance.id.toString();
   String header = "TOKEN " + "$token_saved";
-  final response2 = await http.post(payUrl, headers: {"Authorization": header}, body: {
-    "amount":amount,
+  final response2 = await http.post(payUrl, headers: {
+    "Authorization": header
+  }, body: {
+    "amount": amount,
   });
 
-  if (response2.statusCode <=202) {
+  if (response2.statusCode <= 202) {
     final String response2String = response2.body;
+    var jsonResponse = jsonDecode(response2String);
     print(response2.body);
-    return addPaymentFromJson(response2String);
-  }else{
+    return jsonResponse["amount"];
+  } else {
     print("Error");
+    return null;
   }
 }
-
 
 class add_bill_state extends State<add_bill_payment> {
   String token_saved;
@@ -156,28 +161,33 @@ class add_bill_state extends State<add_bill_payment> {
                       height: 10,
                     ),
                     RaisedButton(
-                      onPressed: () async{
-                        final String rent =rentController.text;
-                        final String units =unitnameController.text;
-                        final String per_unit =price_pernameController.text;
-                        final String water =water_Controller.text;
-                        final String wifi =wifiController.text;
+                      onPressed: () async {
+                        final String rent = rentController.text;
+                        final String units = unitnameController.text;
+                        final String per_unit = price_pernameController.text;
+                        final String water = water_Controller.text;
+                        final String wifi = wifiController.text;
 
-                        if (rent!=''&&units!=''&&per_unit!=''&&water!=''&&wifi!='') {
-                          final AddBill add = await addBill(tenant_instance, token_saved, rent, units, per_unit, water, wifi);
-                          Navigator.pop(context);
-                        }else{
+                        if (rent != '' &&
+                            units != '' &&
+                            per_unit != '' &&
+                            water != '' &&
+                            wifi != '') {
+                          int sub = await addBill(tenant_instance, token_saved,
+                              rent, units, per_unit, water, wifi);
+                          Navigator.pop(context, sub);
+                        } else {
                           print("error");
                           setState(() {
-                            _error="error";
+                            _error = "error";
                           });
-                          
                         }
-                        
                       },
                       child: Text("Create Bill"),
                     ),
-                    _error == null ? Container() : Text("All fields must be filled"),
+                    _error == null
+                        ? Container()
+                        : Text("All fields must be filled"),
                   ],
                 ),
               )
@@ -199,23 +209,25 @@ class add_bill_state extends State<add_bill_payment> {
                       height: 10,
                     ),
                     RaisedButton(
-                      onPressed: () async{
-                        final String amount=ammountController.text;
+                      onPressed: () async {
+                        final String amount = ammountController.text;
 
-                        if (amount!='') {
-                          final AddPayment pay= await addPayment(tenant_instance, token_saved, amount);
-                          Navigator.pop(context);
-                        }else{
+                        if (amount != '') {
+                          int pay = await addPayment(
+                              tenant_instance, token_saved, amount);
+                          Navigator.pop(context, -pay);
+                        } else {
                           print("error");
                           setState(() {
-                             _error="error";
+                            _error = "error";
                           });
                         }
-                        
                       },
                       child: Text("Add Payment"),
                     ),
-                    _error == null ? Container() : Text("All fields must be filled"),
+                    _error == null
+                        ? Container()
+                        : Text("All fields must be filled"),
                   ],
                 ),
               ));

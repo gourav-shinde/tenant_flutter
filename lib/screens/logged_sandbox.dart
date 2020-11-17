@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/screens/add_tenant.dart';
@@ -87,16 +86,19 @@ class TenantViewState extends State<TenantView> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(snapshot.data[index].name),
-                      trailing: Text(snapshot.data[index].balance.toString()),
+                      trailing: snapshot.data[index].balance >= 0
+                          ? Text(
+                              snapshot.data[index].balance.toString(),
+                              style: TextStyle(color: Colors.green),
+                            )
+                          : Text(
+                              snapshot.data[index].balance.toString(),
+                              style: TextStyle(color: Colors.red),
+                            ),
                       onTap: () {
                         var balance = snapshot.data[index].balance;
                         print(snapshot.data[index].name);
                         print(balance);
-                        // Navigator.push(context,
-                        //     MaterialPageRoute(builder: (context) {
-                        //   return Tenant_detail(
-                        //       snapshot.data[index], Token_saved);
-                        // }));
                         Navigator.push(
                           context,
                           MaterialPageRoute(

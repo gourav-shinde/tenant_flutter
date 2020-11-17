@@ -57,8 +57,11 @@ class RegisterState extends State<Register> {
   bool _showRePassword = false;
   @override
   Widget build(BuildContext context) {
+    AssetImage logoimage = AssetImage("images/Arsenel_logo.png");
+    Image image = Image(image: logoimage);
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
           padding: EdgeInsets.all(32.0),
           child: Form(
@@ -66,7 +69,14 @@ class RegisterState extends State<Register> {
             child: ListView(
               children: <Widget>[
                 SizedBox(
-                  height: 190,
+                  height: 20,
+                ),
+                SizedBox(
+                  height: 200,
+                  child: image,
+                ),
+                SizedBox(
+                  height: 10,
                 ),
                 TextField(
                   controller: usernameController,

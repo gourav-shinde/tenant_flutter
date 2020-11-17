@@ -17,12 +17,16 @@ class AddTenantView extends StatefulWidget {
   }
 }
 
-Future<AddTenant> addTenant(String name, String mobile, String depos, String room, String date,String Token_saved) async {
+Future<AddTenant> addTenant(String name, String mobile, String depos,
+    String room, String date, String Token_saved) async {
   print(Token_saved);
-  final apiUrl = "https://tenant-manager-arsenel.herokuapp.com/app/tenant_views";
+  final apiUrl =
+      "https://tenant-manager-arsenel.herokuapp.com/app/tenant_views";
   String header = "TOKEN " + "$Token_saved";
   print(header);
-  final addedResponse = await http.post(apiUrl,headers: {"Authorization": header}, body: {
+  final addedResponse = await http.post(apiUrl, headers: {
+    "Authorization": header
+  }, body: {
     "name": name,
     "mobile_no": mobile,
     "start_date": date,
@@ -52,7 +56,7 @@ class AddTenantViewState extends State<AddTenantView> {
   AddTenant _addTenant;
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Tenant"),
@@ -79,6 +83,17 @@ class AddTenantViewState extends State<AddTenantView> {
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.phone_android),
                   labelText: "Mobile no.",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  )),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.email),
+                  labelText: "Email",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   )),
@@ -148,7 +163,8 @@ class AddTenantViewState extends State<AddTenantView> {
                   print(deposite);
                   print(date);
                   print(room_name);
-                  final AddTenant added = await addTenant(name, mobile, deposite, room_name, date,Token_saved);
+                  final AddTenant added = await addTenant(
+                      name, mobile, deposite, room_name, date, Token_saved);
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.push(context, MaterialPageRoute(builder: (context) {

@@ -84,11 +84,12 @@ class tenant_detail_state extends State<Tenant_detail> {
       body: Container(
         child: Column(
           children: <Widget>[
-            Expanded(
+            Container(
               child: Container(
                 padding: EdgeInsets.all(15),
+                height: 230,
                 width: double.infinity,
-                color: Colors.grey[100],
+                color: Colors.white,
                 child: Column(
                   children: [
                     Text(
@@ -102,6 +103,9 @@ class tenant_detail_state extends State<Tenant_detail> {
                     Text(tenant_instance.roomName),
                     Text("Deposite : " + tenant_instance.deposite.toString()),
                     Text("Check in : " + tenant_instance.startDate.toString()),
+                    SizedBox(
+                      height: 10,
+                    ),
                     tenant_instance.balance >= 0
                         ? Text(
                             tenant_instance.balance.toString(),
@@ -257,11 +261,16 @@ class tenant_detail_state extends State<Tenant_detail> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           print("add");
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
+          int recBill = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) {
             return add_bill_payment(tenant_instance, token_saved, _isbill);
           }));
+          setState(() {
+            tenant_instance.balance -= recBill;
+            print("hello");
+          });
         },
         child: Icon(Icons.add),
       ),
