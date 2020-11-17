@@ -87,7 +87,7 @@ class tenant_detail_state extends State<Tenant_detail> {
             Container(
               child: Container(
                 padding: EdgeInsets.all(15),
-                height: 230,
+                height: 215,
                 width: double.infinity,
                 color: Colors.white,
                 child: Column(
@@ -195,68 +195,67 @@ class tenant_detail_state extends State<Tenant_detail> {
                   ),
 
             // list body
-
-            _isbill
-                ? Container(
-                    height: 400,
-                    color: Colors.grey[50],
-                    child: FutureBuilder(
-                      future: createBillList(tenant_instance, token_saved),
-                      builder: (context, snapshot) {
-                        if (snapshot.data == null) {
-                          return Container(
-                            child: Center(
-                              child: Text("Loading"),
-                            ),
-                          );
-                        } else
-                          return ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title:
-                                    Text(snapshot.data[index].date.toString()),
-                                trailing:
-                                    Text(snapshot.data[index].total.toString()),
-                                onTap: () {
-                                  print("pressed");
+            Expanded(
+                child: _isbill
+                    ? Container(
+                        color: Colors.grey[50],
+                        child: FutureBuilder(
+                          future: createBillList(tenant_instance, token_saved),
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return Container(
+                                child: Center(
+                                  child: Text("Loading"),
+                                ),
+                              );
+                            } else
+                              return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title: Text(
+                                        snapshot.data[index].date.toString()),
+                                    trailing: Text(
+                                        snapshot.data[index].total.toString()),
+                                    onTap: () {
+                                      print("pressed");
+                                    },
+                                  );
                                 },
                               );
-                            },
-                          );
-                      },
-                    ),
-                  )
-                : Container(
-                    height: 400,
-                    color: Colors.grey[50],
-                    child: FutureBuilder(
-                      future: createPayemntList(tenant_instance, token_saved),
-                      builder: (context, snapshot) {
-                        if (snapshot.data == null) {
-                          return Container(
-                            child: Center(
-                              child: Text("Loading"),
-                            ),
-                          );
-                        } else
-                          return ListView.builder(
-                            itemCount: snapshot.data.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(
-                                    snapshot.data[index].datetime.toString()),
-                                trailing: Text(
-                                    snapshot.data[index].amount.toString()),
-                                onTap: () {
-                                  print("pressed");
+                          },
+                        ),
+                      )
+                    : Container(
+                        color: Colors.grey[50],
+                        child: FutureBuilder(
+                          future:
+                              createPayemntList(tenant_instance, token_saved),
+                          builder: (context, snapshot) {
+                            if (snapshot.data == null) {
+                              return Container(
+                                child: Center(
+                                  child: Text("Loading"),
+                                ),
+                              );
+                            } else
+                              return ListView.builder(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title: Text(snapshot.data[index].datetime
+                                        .toString()),
+                                    trailing: Text(
+                                        snapshot.data[index].amount.toString()),
+                                    onTap: () {
+                                      print("pressed");
+                                    },
+                                  );
                                 },
                               );
-                            },
-                          );
-                      },
-                    ),
-                  )
+                          },
+                        ),
+                      )),
           ],
         ),
       ),
