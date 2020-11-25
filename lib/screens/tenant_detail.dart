@@ -112,11 +112,11 @@ class tenant_detail_state extends State<Tenant_detail> {
                       height: 10,
                     ),
                     tenant_instance.balance >= 0
-                        ? Text(
+                        ? Text(" ₹ " +
                             tenant_instance.balance.toString(),
                             style: TextStyle(color: Colors.green, fontSize: 25),
                           )
-                        : Text(
+                        : Text(" ₹ " +
                             tenant_instance.balance.toString(),
                             style: TextStyle(
                               color: Colors.red,
@@ -220,7 +220,7 @@ class tenant_detail_state extends State<Tenant_detail> {
                                   return ListTile(
                                     title: Text(
                                         snapshot.data[index].date.toString()),
-                                    trailing: Text(
+                                    trailing: Text(" ₹ " +
                                         snapshot.data[index].total.toString()),
                                     onTap: () {
                                       print("pressed");
@@ -255,7 +255,7 @@ class tenant_detail_state extends State<Tenant_detail> {
                                   return ListTile(
                                     title: Text(snapshot.data[index].datetime
                                         .toString()),
-                                    trailing: Text(
+                                    trailing: Text(" ₹ " +
                                         snapshot.data[index].amount.toString()),
                                     onTap: () {
                                       print("pressed");

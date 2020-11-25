@@ -18,7 +18,7 @@ class AddTenantView extends StatefulWidget {
 }
 
 Future<AddTenant> addTenant(String name, String mobile, String depos,
-    String room, String date, String Token_saved) async {
+    String email, String room, String date, String Token_saved) async {
   print(Token_saved);
   final apiUrl =
       "https://tenant-manager-arsenel.herokuapp.com/app/tenant_views";
@@ -28,6 +28,7 @@ Future<AddTenant> addTenant(String name, String mobile, String depos,
     "Authorization": header
   }, body: {
     "name": name,
+    "email": email,
     "mobile_no": mobile,
     "start_date": date,
     "deposite": depos,
@@ -49,8 +50,11 @@ class AddTenantViewState extends State<AddTenantView> {
   final TextEditingController depositeController = TextEditingController();
   final TextEditingController roomcontroller = TextEditingController();
   final TextEditingController dateIscontroller = TextEditingController();
+  final TextEditingController emailcontroller = TextEditingController();
 
   String Token_saved;
+  String response_output;
+  String _error;
   AddTenantViewState(this.Token_saved);
 
   AddTenant _addTenant;
@@ -91,6 +95,7 @@ class AddTenantViewState extends State<AddTenantView> {
               height: 10,
             ),
             TextField(
+              controller: emailcontroller,
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.email),
                   labelText: "Email",
@@ -158,18 +163,31 @@ class AddTenantViewState extends State<AddTenantView> {
                   final String deposite = depositeController.text;
                   final String date = dateIscontroller.text;
                   final String room_name = roomcontroller.text;
+                  final String email = emailcontroller.text;
                   print(name);
                   print(mobile);
                   print(deposite);
                   print(date);
                   print(room_name);
-                  final AddTenant added = await addTenant(
-                      name, mobile, deposite, room_name, date, Token_saved);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return TenantView(Token_saved);
-                  }));
+                  if (mobile.length == 10) {
+                    final AddTenant added = await addTenant(name, mobile,
+                        deposite, email, room_name, date, Token_saved);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return TenantView(Token_saved);
+                    }));
+                  } else if(name==''&& mobile==''&& deposite==''&& date==''&& room_name==''){
+                    print("error");
+                    setState(() {
+                      response_output = "error";
+                    });
+                  }else{
+                    setState(() {
+                      _error = "error";
+                    });
+                  }
                 }),
             RaisedButton(
                 child: Text("Cancel"),
@@ -177,6 +195,15 @@ class AddTenantViewState extends State<AddTenantView> {
                   print("cancel");
                   Navigator.pop(context);
                 }),
+            _error == null ? Container() : Text("Mobile no. must be of 10 digits only"),
+            response_output == null ? Container() : Text("All fields must be filled"),
+            // if (_error==''&& response_output=='') {
+            //   Container()
+            // }else if(_error!=''){
+            //   Text("Mobile no. must be of 10 digits only")
+            // }else{
+            //   Text("All fields must be filled")
+            // }
           ],
         ),
       ),

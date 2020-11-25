@@ -87,11 +87,11 @@ class TenantViewState extends State<TenantView> {
                     return ListTile(
                       title: Text(snapshot.data[index].name),
                       trailing: snapshot.data[index].balance >= 0
-                          ? Text(
+                          ? Text(" ₹ " + 
                               snapshot.data[index].balance.toString(),
                               style: TextStyle(color: Colors.green),
                             )
-                          : Text(
+                          : Text(" ₹ " +
                               snapshot.data[index].balance.toString(),
                               style: TextStyle(color: Colors.red),
                             ),

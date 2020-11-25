@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     }));
                   },
                   child: Text("Create An Account? Sign UP"),
-                )
+                ),
               ],
             ),
           ), // This trailing comma makes auto-formatting nicer for build methods.
