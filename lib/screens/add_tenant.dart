@@ -56,7 +56,7 @@ class AddTenantViewState extends State<AddTenantView> {
   String response_output;
   String _error;
   AddTenantViewState(this.Token_saved);
-
+  bool _isloading = false;
   AddTenant _addTenant;
 
   @override
@@ -73,7 +73,7 @@ class AddTenantViewState extends State<AddTenantView> {
               controller: nameController,
               decoration: InputDecoration(
                   prefixIcon: Icon(Icons.person),
-                  labelText: "Username",
+                  labelText: "Tenant name",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   )),
@@ -158,35 +158,43 @@ class AddTenantViewState extends State<AddTenantView> {
             RaisedButton(
                 child: Text("Create Tenant"),
                 onPressed: () async {
-                  final String name = nameController.text;
-                  final String mobile = mobileController.text;
-                  final String deposite = depositeController.text;
-                  final String date = dateIscontroller.text;
-                  final String room_name = roomcontroller.text;
-                  final String email = emailcontroller.text;
-                  print(name);
-                  print(mobile);
-                  print(deposite);
-                  print(date);
-                  print(room_name);
-                  if (mobile.length == 10) {
-                    final AddTenant added = await addTenant(name, mobile,
-                        deposite, email, room_name, date, Token_saved);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return TenantView(Token_saved);
-                    }));
-                  } else if(name==''&& mobile==''&& deposite==''&& date==''&& room_name==''){
-                    print("error");
-                    setState(() {
-                      response_output = "error";
-                    });
-                  }else{
-                    setState(() {
-                      _error = "error";
-                    });
+                  if (!_isloading) {
+                    _isloading = true;
+                    final String name = nameController.text;
+                    final String mobile = mobileController.text;
+                    final String deposite = depositeController.text;
+                    final String date = dateIscontroller.text;
+                    final String room_name = roomcontroller.text;
+                    final String email = emailcontroller.text;
+                    print(name);
+                    print(mobile);
+                    print(deposite);
+                    print(date);
+                    print(room_name);
+                    if (mobile.length == 10) {
+                      final AddTenant added = await addTenant(name, mobile,
+                          deposite, email, room_name, date, Token_saved);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return TenantView(Token_saved);
+                      }));
+                    } else if (name == '' &&
+                        mobile == '' &&
+                        deposite == '' &&
+                        date == '' &&
+                        room_name == '') {
+                      print("error");
+                      setState(() {
+                        response_output = "error";
+                      });
+                    } else {
+                      setState(() {
+                        _error = "error";
+                      });
+                    }
+                    _isloading = false;
                   }
                 }),
             RaisedButton(
@@ -195,8 +203,12 @@ class AddTenantViewState extends State<AddTenantView> {
                   print("cancel");
                   Navigator.pop(context);
                 }),
-            _error == null ? Container() : Text("Mobile no. must be of 10 digits only"),
-            response_output == null ? Container() : Text("All fields must be filled"),
+            _error == null
+                ? Container()
+                : Text("Mobile no. must be of 10 digits only"),
+            response_output == null
+                ? Container()
+                : Text("All fields must be filled"),
             // if (_error==''&& response_output=='') {
             //   Container()
             // }else if(_error!=''){

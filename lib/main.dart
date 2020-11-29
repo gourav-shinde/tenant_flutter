@@ -152,22 +152,30 @@ class _MyHomePageState extends State<MyHomePage> {
                     textScaleFactor: 1.5,
                   ),
                   onPressed: () async {
-                    _loading = true;
-                    final String username = usernameController.text;
-                    final String password = passwordController.text;
-                    final String token = await createToken(username, password);
-                    print("received");
-                    _loading = false;
-                    setState(() {
-                      if (token != "error") {
-                        Token_saved = token;
-                        Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => TenantView(Token_saved)));
-                      } else {
-                        _error = "error";
-                      }
-                    });
+                    if (!_loading) {
+                      setState(() {
+                        _loading = true;
+                      });
+                      final String username = usernameController.text;
+                      final String password = passwordController.text;
+                      final String token =
+                          await createToken(username, password);
+                      print("received");
+                      _loading = false;
+                      setState(() {
+                        if (token != "error") {
+                          Token_saved = token;
+                          Navigator.pop(context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TenantView(Token_saved)));
+                        } else {
+                          _error = "error";
+                        }
+                        setState(() {
+                          _loading = false;
+                        });
+                      });
+                    }
                   },
                 ),
                 FlatButton(

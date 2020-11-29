@@ -70,6 +70,7 @@ class add_bill_state extends State<add_bill_payment> {
   String token_saved;
   Tenant tenant_instance;
   bool _isbill;
+  bool _isloading = false;
   String _error;
   add_bill_state(this.tenant_instance, this.token_saved, this._isbill);
   final TextEditingController rentController = TextEditingController();
@@ -162,25 +163,35 @@ class add_bill_state extends State<add_bill_payment> {
                     ),
                     RaisedButton(
                       onPressed: () async {
-                        final String rent = rentController.text;
-                        final String units = unitnameController.text;
-                        final String per_unit = price_pernameController.text;
-                        final String water = water_Controller.text;
-                        final String wifi = wifiController.text;
+                        if (!_isloading) {
+                          _isloading = true;
+                          final String rent = rentController.text;
+                          final String units = unitnameController.text;
+                          final String per_unit = price_pernameController.text;
+                          final String water = water_Controller.text;
+                          final String wifi = wifiController.text;
 
-                        if (rent != '' &&
-                            units != '' &&
-                            per_unit != '' &&
-                            water != '' &&
-                            wifi != '') {
-                          int sub = await addBill(tenant_instance, token_saved,
-                              rent, units, per_unit, water, wifi);
-                          Navigator.pop(context, sub);
-                        } else {
-                          print("error");
-                          setState(() {
-                            _error = "error";
-                          });
+                          if (rent != '' &&
+                              units != '' &&
+                              per_unit != '' &&
+                              water != '' &&
+                              wifi != '') {
+                            int sub = await addBill(
+                                tenant_instance,
+                                token_saved,
+                                rent,
+                                units,
+                                per_unit,
+                                water,
+                                wifi);
+                            Navigator.pop(context, sub);
+                          } else {
+                            print("error");
+                            setState(() {
+                              _error = "error";
+                            });
+                          }
+                          _isloading = false;
                         }
                       },
                       child: Text("Create Bill"),
@@ -210,17 +221,21 @@ class add_bill_state extends State<add_bill_payment> {
                     ),
                     RaisedButton(
                       onPressed: () async {
-                        final String amount = ammountController.text;
+                        if (!_isloading) {
+                          _isloading = true;
+                          final String amount = ammountController.text;
 
-                        if (amount != '') {
-                          int pay = await addPayment(
-                              tenant_instance, token_saved, amount);
-                          Navigator.pop(context, -pay);
-                        } else {
-                          print("error");
-                          setState(() {
-                            _error = "error";
-                          });
+                          if (amount != '') {
+                            int pay = await addPayment(
+                                tenant_instance, token_saved, amount);
+                            Navigator.pop(context, -pay);
+                          } else {
+                            print("error");
+                            setState(() {
+                              _error = "error";
+                            });
+                            _isloading = false;
+                          }
                         }
                       },
                       child: Text("Add Payment"),

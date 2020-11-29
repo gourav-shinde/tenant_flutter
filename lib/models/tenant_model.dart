@@ -8,6 +8,7 @@ class Tenant {
   int deposite;
   String roomName;
   int balance;
+  String email;
 
   Tenant(
     this.id,
@@ -17,5 +18,6 @@ class Tenant {
     this.deposite,
     this.roomName,
     this.balance,
+    this.email,
   );
 }

@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tenant_manager/models/editTenant_model.dart';
 import 'package:tenant_manager/models/tenant_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,22 +16,17 @@ class editTenant extends StatefulWidget {
   }
 }
 
-Future<EditTenant> editedTenant(
-    String token_saved,
-    Tenant tenant_instance,
-    String name,
-    String email,
-    String mobile,
-    String room) async {
+Future<Tenant> editedTenant(String token_saved, Tenant tenant_instance,
+    String name, String email, String mobile, String room) async {
   print(token_saved);
   final apiUrl =
       "https://tenant-manager-arsenel.herokuapp.com/app/tenant_views/" +
           tenant_instance.id.toString();
   String header = "TOKEN " + "$token_saved";
   print(header);
-  final editedResponse = await http.put(apiUrl,headers: {
+  final editedResponse = await http.put(apiUrl, headers: {
     "Authorization": header
-  },body: {
+  }, body: {
     "name": name,
     "email": email,
     "mobile_no": mobile,
@@ -40,12 +35,22 @@ Future<EditTenant> editedTenant(
   });
 
   if (editedResponse.statusCode <= 202) {
-    final String editedString = editedResponse.body;
-    print(editedResponse.body);
-
-    return editTenantFromJson(editedString);
+    var JsonResponse = jsonDecode(editedResponse.body);
+    // print("##############################");
+    // print(JsonResponse);
+    Tenant returnResponse = Tenant(
+        tenant_instance.id,
+        name,
+        mobile,
+        tenant_instance.startDate,
+        tenant_instance.deposite,
+        room,
+        tenant_instance.balance,
+        email);
+    return returnResponse;
   } else {
-    print(editedResponse.body);
+    // print(editedResponse.body);
+    return null;
   }
 }
 
@@ -53,19 +58,18 @@ class editTenantState extends State<editTenant> {
   String token_saved;
   Tenant tenant_instance;
   String _error;
-
+  bool _isloading = false;
   TextEditingController nameController;
   TextEditingController mobileController;
   TextEditingController emailController;
   TextEditingController roomController;
-  
-  editTenantState(this.token_saved, this.tenant_instance){
-  nameController = TextEditingController(text: tenant_instance.name);
-  mobileController = TextEditingController(text: tenant_instance.mobileNo);
-  emailController = TextEditingController(text: 'defaul@gmail.com');
-  roomController = TextEditingController(text: tenant_instance.roomName);
+
+  editTenantState(this.token_saved, this.tenant_instance) {
+    nameController = TextEditingController(text: tenant_instance.name);
+    mobileController = TextEditingController(text: tenant_instance.mobileNo);
+    emailController = TextEditingController(text: tenant_instance.email);
+    roomController = TextEditingController(text: tenant_instance.roomName);
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -133,24 +137,34 @@ class editTenantState extends State<editTenant> {
                 height: 10,
               ),
               RaisedButton(
-                onPressed: () async{
-                  print("hello");
-                  final String name = nameController.text;
-                  final String mobile = mobileController.text;
-                  final String room_name = roomController.text;
-                  final String email = emailController.text;
-                  // final int deposite=tenant_instance.deposite;
-                  print(name);
-                  print(mobile);
-                  print(email);
-                  print(room_name);
-                  if (mobile.length == 10){
-                    final EditTenant edited = await editedTenant(token_saved, tenant_instance,name,email,mobile,room_name);
-                    Navigator.pop(context);
-                  }else{
-                    setState(() {
-                      _error = "error";
-                    });
+                onPressed: () async {
+                  if (!_isloading) {
+                    _isloading = true;
+                    final String name = nameController.text;
+                    final String mobile = mobileController.text;
+                    final String room_name = roomController.text;
+                    final String email = emailController.text;
+                    // final int deposite=tenant_instance.deposite;
+                    print(name);
+                    print(mobile);
+                    print(email);
+                    print(room_name);
+                    if (mobile.length == 10) {
+                      Tenant edited = await editedTenant(token_saved,
+                          tenant_instance, name, email, mobile, room_name);
+                      if (edited != null) {
+                        Navigator.pop(context, edited);
+                      } else {
+                        setState(() {
+                          _error = "error";
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        _error = "error";
+                      });
+                      _isloading = false;
+                    }
                   }
                 },
                 child: Text("Save Changes"),
@@ -160,11 +174,13 @@ class editTenantState extends State<editTenant> {
               ),
               RaisedButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.pop(context, tenant_instance);
                 },
                 child: Text("Cancel"),
               ),
-              _error == null ? Container() : Text("Mobile no. must be of 10 digits only"),
+              _error == null
+                  ? Container()
+                  : Text("Mobile no. must be of 10 digits only"),
             ],
           ),
         ),

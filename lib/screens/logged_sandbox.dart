@@ -33,7 +33,7 @@ https://tenant-manager-arsenel.herokuapp.com/app/tenant_views""";
   List<Tenant> tenants = [];
   for (var u in JsonData["tenants"]) {
     Tenant obj = Tenant(u["id"], u["name"], u["mobile_no"], u["start_date"],
-        u["deposite"], u["room_name"], u["balance"]);
+        u["deposite"], u["room_name"], u["balance"], u['email']);
     tenants.add(obj);
   }
   return tenants;
@@ -76,8 +76,9 @@ class TenantViewState extends State<TenantView> {
             builder: (context, snapshot) {
               if (snapshot.data == null) {
                 return Container(
+                  padding: EdgeInsets.all(100),
                   child: Center(
-                    child: Text("Loading"),
+                    child: LinearProgressIndicator(),
                   ),
                 );
               } else
@@ -87,12 +88,12 @@ class TenantViewState extends State<TenantView> {
                     return ListTile(
                       title: Text(snapshot.data[index].name),
                       trailing: snapshot.data[index].balance >= 0
-                          ? Text(" ₹ " + 
-                              snapshot.data[index].balance.toString(),
+                          ? Text(
+                              " ₹ " + snapshot.data[index].balance.toString(),
                               style: TextStyle(color: Colors.green),
                             )
-                          : Text(" ₹ " +
-                              snapshot.data[index].balance.toString(),
+                          : Text(
+                              " ₹ " + snapshot.data[index].balance.toString(),
                               style: TextStyle(color: Colors.red),
                             ),
                       onTap: () {

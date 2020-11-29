@@ -27,7 +27,7 @@ class billDetailState extends State<billDetail> {
       body: Padding(
         padding: EdgeInsets.all(25),
         child: Container(
-          padding: EdgeInsets.only(left:28,top: 20.0),
+          padding: EdgeInsets.only(left: 28, top: 20.0),
           alignment: Alignment.center,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -86,7 +86,7 @@ class billDetailState extends State<billDetail> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("units here",
+                      Text(bill_instance.electric_units.toString(),
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w500,
@@ -113,7 +113,10 @@ class billDetailState extends State<billDetail> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("₹ per units here",
+                      Text(
+                          "₹ " +
+                              bill_instance.price_per_unit.toString() +
+                              " per units here",
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w500,

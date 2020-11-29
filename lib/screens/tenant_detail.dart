@@ -37,8 +37,16 @@ Future<List<Bill>> createBillList(
   print(JsonData["bills"]);
   List<Bill> bills = [];
   for (var u in JsonData["bills"]) {
-    Bill obj = Bill(u["id"], u["date"], u["rent"], u["electric_total"],
-        u["water_bill"], u["wifi_charge"], u["total"]);
+    Bill obj = Bill(
+        u["id"],
+        u["date"],
+        u["rent"],
+        u["electric_total"],
+        u["water_bill"],
+        u["wifi_charge"],
+        u["total"],
+        u['units'],
+        u['price_per_unit']);
     bills.add(obj);
   }
   return bills;
@@ -77,11 +85,16 @@ class tenant_detail_state extends State<Tenant_detail> {
         title: Text(tenant_instance.name),
         actions: [
           FlatButton(
-              onPressed: () {
+              onPressed: () async {
                 print("edit pressed");
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        editTenant(token_saved, tenant_instance)));
+                Tenant returnInstance;
+                returnInstance = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            editTenant(token_saved, tenant_instance)));
+                setState(() {
+                  tenant_instance = returnInstance;
+                });
               },
               child: Icon(Icons.edit))
         ],
@@ -92,7 +105,7 @@ class tenant_detail_state extends State<Tenant_detail> {
             Container(
               child: Container(
                 padding: EdgeInsets.all(15),
-                height: 215,
+                height: 230,
                 width: double.infinity,
                 color: Colors.white,
                 child: Column(
@@ -100,6 +113,10 @@ class tenant_detail_state extends State<Tenant_detail> {
                     Text(
                       tenant_instance.name,
                       style: TextStyle(fontSize: 40),
+                    ),
+                    Text(
+                      "Email : " + tenant_instance.email,
+                      style: TextStyle(fontSize: 18),
                     ),
                     Text(
                       "Mobile No : " + tenant_instance.mobileNo.toString(),
@@ -112,12 +129,12 @@ class tenant_detail_state extends State<Tenant_detail> {
                       height: 10,
                     ),
                     tenant_instance.balance >= 0
-                        ? Text(" ₹ " +
-                            tenant_instance.balance.toString(),
+                        ? Text(
+                            " ₹ " + tenant_instance.balance.toString(),
                             style: TextStyle(color: Colors.green, fontSize: 25),
                           )
-                        : Text(" ₹ " +
-                            tenant_instance.balance.toString(),
+                        : Text(
+                            " ₹ " + tenant_instance.balance.toString(),
                             style: TextStyle(
                               color: Colors.red,
                               fontSize: 25,
