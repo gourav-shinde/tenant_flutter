@@ -41,6 +41,7 @@ Future<ChangeUser> changeUser(String email) async{
 
 class ChangePasswordState extends State<ChangePassword> {
   TextEditingController emailController = TextEditingController();
+  String error;
 
   @override
   Widget build(BuildContext context) {
@@ -73,13 +74,21 @@ class ChangePasswordState extends State<ChangePassword> {
                       .of(context)
                       .primaryColorLight,
                   child: Text(
-                    "   Password Request   ",
+                    "  Password Request  ",
                     textScaleFactor: 1.0,
                   ),
                   onPressed: () async {
                     final String email = emailController.text;
-                    final ChangePass changeP = await changePass(email);
-                    Navigator.pop(context);
+                    
+                    if (email !='') {
+                      final ChangePass changeP = await changePass(email);
+                      Navigator.pop(context);
+                    } else {
+                      setState(() {
+                        print("error");
+                        error='error';
+                      });
+                    } 
                   },
                 ),),
                 Container(width: 10.0,),
@@ -91,16 +100,32 @@ class ChangePasswordState extends State<ChangePassword> {
                       .of(context)
                       .primaryColorLight,
                   child: Text(
-                    "   User Request   ",
+                    "  User Request  ",
                     textScaleFactor: 1.0,
                   ),
                   onPressed: () async {
                     final String email = emailController.text;
+                    if(email !=''){
                     final ChangeUser changeU= await changeUser(email);
                     Navigator.pop(context);
+                    }else{
+                      print("error");
+                      setState(() {
+                        error="error";
+                      });
+                    }
                   },
-                ),)
-              ])
+                ),),
+              ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  error==null ? Container():Text("Email field is empty.")
+                ],
+              )
             ],
           )),
     );
