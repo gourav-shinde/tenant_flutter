@@ -6,7 +6,7 @@ Android Flutter Application with Django rest API.
 
 This Application is designed for House owners/hostels,etc who give rooms for Rents. 
 
-APP url: https://www.dropbox.com/s/gxdn35m2zvu0d40/tenant-manager.apk?dl=0
+APP url:https://www.dropbox.com/s/m5sge2s9x6pa9i6/tenant-manager.apk?dl=0
 
 Contributers: 
 - Gaurav Shinde(gauravsanjayshinde@gmail.com) 
