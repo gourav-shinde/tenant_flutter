@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/models/tenant_model.dart';
+import 'package:intl/intl.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class add_bill_payment extends StatefulWidget {
   String token_saved;
@@ -17,8 +19,16 @@ class add_bill_payment extends StatefulWidget {
   }
 }
 
-Future<int> addBill(Tenant tenant_instance, String token_saved, String rent,
-    String units, String perUnit, String water, String wifi) async {
+Future<int> addBill(
+    Tenant tenant_instance,
+    String token_saved,
+    String rent,
+    String units,
+    String perUnit,
+    String water,
+    String wifi,
+    String start,
+    String end) async {
   final String billUrl =
       "https://tenant-manager-arsenel.herokuapp.com/app/bill_views/" +
           tenant_instance.id.toString();
@@ -26,6 +36,8 @@ Future<int> addBill(Tenant tenant_instance, String token_saved, String rent,
   final response = await http.post(billUrl, headers: {
     "Authorization": header
   }, body: {
+    "start_date": start,
+    "end_date": end,
     "rent": rent,
     "units": units,
     "price_per_unit": perUnit,
@@ -74,6 +86,8 @@ class add_bill_state extends State<add_bill_payment> {
   String _error;
   add_bill_state(this.tenant_instance, this.token_saved, this._isbill);
   final TextEditingController rentController = TextEditingController();
+  final TextEditingController startdateController = TextEditingController();
+  final TextEditingController enddateController = TextEditingController();
   final TextEditingController unitnameController = TextEditingController();
   final TextEditingController price_pernameController = TextEditingController();
   final TextEditingController water_Controller = TextEditingController();
@@ -96,6 +110,52 @@ class add_bill_state extends State<add_bill_payment> {
                 padding: EdgeInsets.all(35),
                 child: ListView(
                   children: [
+                    DateTimeField(
+                      format: DateFormat("yyyy-MM-dd"),
+                      // enabled: false,
+                      initialValue: DateTime.now(),
+                      controller: startdateController,
+
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                      },
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.calendar_today),
+                          labelText: "From",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    DateTimeField(
+                      format: DateFormat("yyyy-MM-dd"),
+                      // enabled: false,
+                      initialValue: DateTime.now(),
+                      controller: enddateController,
+
+                      onShowPicker: (context, currentValue) {
+                        return showDatePicker(
+                            context: context,
+                            firstDate: DateTime(1900),
+                            initialDate: currentValue ?? DateTime.now(),
+                            lastDate: DateTime(2100));
+                      },
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.calendar_today),
+                          labelText: "To",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     TextField(
                       controller: rentController,
                       keyboardType: TextInputType.number,
@@ -170,12 +230,16 @@ class add_bill_state extends State<add_bill_payment> {
                           final String per_unit = price_pernameController.text;
                           final String water = water_Controller.text;
                           final String wifi = wifiController.text;
+                          final String start = startdateController.text;
+                          final String end = enddateController.text;
 
                           if (rent != '' &&
                               units != '' &&
                               per_unit != '' &&
                               water != '' &&
-                              wifi != '') {
+                              wifi != '' &&
+                              start != '' &&
+                              end != '') {
                             int sub = await addBill(
                                 tenant_instance,
                                 token_saved,
@@ -183,7 +247,9 @@ class add_bill_state extends State<add_bill_payment> {
                                 units,
                                 per_unit,
                                 water,
-                                wifi);
+                                wifi,
+                                start,
+                                end);
                             Navigator.pop(context, sub);
                           } else {
                             print("error");

@@ -46,7 +46,9 @@ Future<List<Bill>> createBillList(
         u["wifi_charge"],
         u["total"],
         u['units'],
-        u['price_per_unit']);
+        u['price_per_unit'],
+        u['start_date'],
+        u['end_date']);
     bills.add(obj);
   }
   return bills;
@@ -93,7 +95,9 @@ class tenant_detail_state extends State<Tenant_detail> {
                         builder: (context) =>
                             editTenant(token_saved, tenant_instance)));
                 setState(() {
-                  tenant_instance = returnInstance;
+                  if (returnInstance != null) {
+                    tenant_instance = returnInstance;
+                  }
                 });
               },
               child: Icon(Icons.edit))
@@ -227,7 +231,7 @@ class tenant_detail_state extends State<Tenant_detail> {
                             if (snapshot.data == null) {
                               return Container(
                                 child: Center(
-                                  child: Text("Loading"),
+                                  child: CircularProgressIndicator(),
                                 ),
                               );
                             } else
@@ -262,7 +266,7 @@ class tenant_detail_state extends State<Tenant_detail> {
                             if (snapshot.data == null) {
                               return Container(
                                 child: Center(
-                                  child: Text("Loading"),
+                                  child: CircularProgressIndicator(),
                                 ),
                               );
                             } else
@@ -294,8 +298,9 @@ class tenant_detail_state extends State<Tenant_detail> {
             return add_bill_payment(tenant_instance, token_saved, _isbill);
           }));
           setState(() {
-            tenant_instance.balance -= recBill;
-            print("hello");
+            if (recBill != null) {
+              tenant_instance.balance -= recBill;
+            }
           });
         },
         child: Icon(Icons.add),

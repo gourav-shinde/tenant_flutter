@@ -35,7 +35,31 @@ class billDetailState extends State<billDetail> {
               Row(
                 children: [
                   Text(
-                    "Date : " + bill_instance.date,
+                    "Bill Created: " + bill_instance.date,
+                    style:
+                        TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "From: " + bill_instance.startdate,
+                    style:
+                        TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "To: " + bill_instance.enddate,
                     style:
                         TextStyle(fontSize: 22.0, fontWeight: FontWeight.w700),
                   ),
@@ -116,7 +140,7 @@ class billDetailState extends State<billDetail> {
                       Text(
                           "₹ " +
                               bill_instance.price_per_unit.toString() +
-                              " per units here",
+                              " per units",
                           style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w500,

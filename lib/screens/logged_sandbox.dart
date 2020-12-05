@@ -78,7 +78,7 @@ class TenantViewState extends State<TenantView> {
                 return Container(
                   padding: EdgeInsets.all(100),
                   child: Center(
-                    child: LinearProgressIndicator(),
+                    child: CircularProgressIndicator(),
                   ),
                 );
               } else
