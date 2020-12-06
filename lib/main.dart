@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:tenant_manager/Register_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:tenant_manager/screens/change_password.dart';
-
 // screens
 import 'package:tenant_manager/screens/logged_sandbox.dart';
 
