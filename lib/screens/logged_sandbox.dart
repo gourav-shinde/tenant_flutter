@@ -28,15 +28,32 @@ https://tenant-manager-arsenel.herokuapp.com/app/tenant_views""";
   String header = "TOKEN " + "$Token_saved";
   print(header);
   final response = await http.get(LoginUrl, headers: {"Authorization": header});
-  var JsonData = jsonDecode(response.body);
-  print(JsonData["tenants"]);
-  List<Tenant> tenants = [];
-  for (var u in JsonData["tenants"]) {
-    Tenant obj = Tenant(u["id"], u["name"], u["mobile_no"], u["start_date"],
-        u["deposite"], u["room_name"], u["balance"], u['email']);
-    tenants.add(obj);
+  if (response.statusCode <= 202) {
+    var JsonData;
+    try {
+      print("object");
+      JsonData = jsonDecode(response.body);
+      print("2");
+    } on Exception catch (exception) {
+      print("3");
+      return null;
+    } catch (error) {
+      print("4");
+      return null;
+    }
+    print(JsonData["tenants"]);
+    List<Tenant> tenants = [];
+    print("5");
+    for (var u in JsonData["tenants"]) {
+      Tenant obj = Tenant(u["id"], u["name"], u["mobile_no"], u["start_date"],
+          u["deposite"], u["room_name"], u["balance"], u['email']);
+      tenants.add(obj);
+    }
+
+    return tenants;
+  } else {
+    return null;
   }
-  return tenants;
 }
 
 class TenantViewState extends State<TenantView> {

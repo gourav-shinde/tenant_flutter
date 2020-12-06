@@ -33,6 +33,7 @@ Future<AddTenant> addTenant(String name, String mobile, String depos,
     "start_date": date,
     "deposite": depos,
     "room_name": room,
+    "active": "True"
   });
 
   if (addedResponse.statusCode <= 202) {

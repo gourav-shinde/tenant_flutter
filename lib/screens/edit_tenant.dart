@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/models/tenant_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:tenant_manager/screens/logged_sandbox.dart';
 
 class editTenant extends StatefulWidget {
   String token_saved;
@@ -13,6 +14,20 @@ class editTenant extends StatefulWidget {
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return editTenantState(token_saved, tenant_instance);
+  }
+}
+
+Future<String> deletetenant(String token_saved, Tenant tenant_instance) async {
+  final apiurl =
+      "https://tenant-manager-arsenel.herokuapp.com/app/tenant_views/" +
+          tenant_instance.id.toString();
+  String header = "TOKEN " + "$token_saved";
+  final response =
+      await http.delete(apiurl, headers: {"Authorization": header});
+  if (response.statusCode <= 202) {
+    return "success";
+  } else {
+    return null;
   }
 }
 
@@ -55,6 +70,7 @@ Future<Tenant> editedTenant(String token_saved, Tenant tenant_instance,
 }
 
 class editTenantState extends State<editTenant> {
+  bool active;
   String token_saved;
   Tenant tenant_instance;
   String _error;
@@ -78,113 +94,147 @@ class editTenantState extends State<editTenant> {
       appBar: AppBar(
         title: Text("Edit " + tenant_instance.name),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(32),
-        child: Container(
-          child: ListView(
-            children: [
-              TextFormField(
-                controller: nameController,
-                // initialValue: tenant_instance.name,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person),
-                    labelText: "Username",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    )),
+      body: _isloading
+          ? Container(
+              padding: EdgeInsets.all(100),
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: mobileController,
-                // initialValue: tenant_instance.mobileNo,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.phone_android),
-                    labelText: "Mobile no.",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    )),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: emailController,
-                // initialValue: tenant_instance.,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email),
-                    labelText: "Email",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    )),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: roomController,
-                // initialValue: tenant_instance.roomName,
-                decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.meeting_room),
-                    labelText: "RoomName",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    )),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              RaisedButton(
-                onPressed: () async {
-                  if (!_isloading) {
-                    _isloading = true;
-                    final String name = nameController.text;
-                    final String mobile = mobileController.text;
-                    final String room_name = roomController.text;
-                    final String email = emailController.text;
-                    // final int deposite=tenant_instance.deposite;
-                    print(name);
-                    print(mobile);
-                    print(email);
-                    print(room_name);
-                    if (mobile.length == 10) {
-                      Tenant edited = await editedTenant(token_saved,
-                          tenant_instance, name, email, mobile, room_name);
-                      if (edited != null) {
-                        Navigator.pop(context, edited);
-                      } else {
+            )
+          : Padding(
+              padding: EdgeInsets.all(32),
+              child: Container(
+                child: ListView(
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      // initialValue: tenant_instance.name,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.person),
+                          labelText: "Username",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: mobileController,
+                      // initialValue: tenant_instance.mobileNo,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.phone_android),
+                          labelText: "Mobile no.",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: emailController,
+                      // initialValue: tenant_instance.,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.email),
+                          labelText: "Email",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: roomController,
+                      // initialValue: tenant_instance.roomName,
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.meeting_room),
+                          labelText: "RoomName",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          )),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    RaisedButton(
+                      onPressed: () async {
+                        if (!_isloading) {
+                          _isloading = true;
+                          final String name = nameController.text;
+                          final String mobile = mobileController.text;
+                          final String room_name = roomController.text;
+                          final String email = emailController.text;
+                          // final int deposite=tenant_instance.deposite;
+                          print(name);
+                          print(mobile);
+                          print(email);
+                          print(room_name);
+                          if (mobile.length == 10) {
+                            Tenant edited = await editedTenant(
+                                token_saved,
+                                tenant_instance,
+                                name,
+                                email,
+                                mobile,
+                                room_name);
+                            if (edited != null) {
+                              Navigator.pop(context, edited);
+                            } else {
+                              setState(() {
+                                _error = "error";
+                              });
+                            }
+                          } else {
+                            setState(() {
+                              _error = "error";
+                            });
+                            _isloading = false;
+                          }
+                        }
+                      },
+                      child: Text("Save Changes"),
+                    ),
+                    RaisedButton(
+                      color: Colors.red,
+                      onPressed: () async {
                         setState(() {
-                          _error = "error";
+                          _isloading = true;
                         });
-                      }
-                    } else {
-                      setState(() {
-                        _error = "error";
-                      });
-                      _isloading = false;
-                    }
-                  }
-                },
-                child: Text("Save Changes"),
+                        String stat =
+                            await deletetenant(token_saved, tenant_instance);
+                        if (stat == "success") {
+                          Navigator.pop(context, tenant_instance);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return TenantView(token_saved);
+                          }));
+                        } else {
+                          setState(() {
+                            _error = "error";
+                          });
+                        }
+                        _isloading = false;
+                      },
+                      child: Text("Delete"),
+                    ),
+                    RaisedButton(
+                      onPressed: () {
+                        Navigator.pop(context, tenant_instance);
+                      },
+                      child: Text("Cancel"),
+                    ),
+                    _error == null
+                        ? Container()
+                        : Text("Mobile no. must be of 10 digits only"),
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 10,
-              ),
-              RaisedButton(
-                onPressed: () {
-                  Navigator.pop(context, tenant_instance);
-                },
-                child: Text("Cancel"),
-              ),
-              _error == null
-                  ? Container()
-                  : Text("Mobile no. must be of 10 digits only"),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
