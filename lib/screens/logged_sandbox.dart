@@ -59,6 +59,8 @@ https://tenant-manager-arsenel.herokuapp.com/app/tenant_views""";
 class TenantViewState extends State<TenantView> {
   String Token_saved;
   TenantViewState(this.Token_saved);
+  final TextEditingController searchController = TextEditingController();
+  String searchString = "";
   resettoken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", null);
@@ -99,35 +101,63 @@ class TenantViewState extends State<TenantView> {
                   ),
                 );
               } else
-                return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(snapshot.data[index].name),
-                      trailing: snapshot.data[index].balance >= 0
-                          ? Text(
-                              " ₹ " + snapshot.data[index].balance.toString(),
-                              style: TextStyle(color: Colors.green),
-                            )
-                          : Text(
-                              " ₹ " + snapshot.data[index].balance.toString(),
-                              style: TextStyle(color: Colors.red),
-                            ),
-                      onTap: () {
-                        var balance = snapshot.data[index].balance;
-                        print(snapshot.data[index].name);
-                        print(balance);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Tenant_detail(
-                                  snapshot.data[index], Token_saved)),
-                        ).then((value) => setState(() {
-                              print("hello");
-                            }));
+                return Column(
+                  children: [
+                    TextFormField(
+                      onChanged: (value) {
+                        setState(() {
+                          searchString = value;
+                        });
                       },
-                    );
-                  },
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                        child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return searchString != null &&
+                                (snapshot.data[index].name)
+                                    .toLowerCase()
+                                    .contains(searchString.toLowerCase())
+                            ? ListTile(
+                                title: Text(snapshot.data[index].name),
+                                trailing: snapshot.data[index].balance >= 0
+                                    ? Text(
+                                        " ₹ " +
+                                            snapshot.data[index].balance
+                                                .toString(),
+                                        style: TextStyle(color: Colors.green),
+                                      )
+                                    : Text(
+                                        " ₹ " +
+                                            snapshot.data[index].balance
+                                                .toString(),
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                onTap: () {
+                                  var balance = snapshot.data[index].balance;
+                                  print(snapshot.data[index].name);
+                                  print(balance);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Tenant_detail(
+                                            snapshot.data[index], Token_saved)),
+                                  ).then((value) => setState(() {
+                                        print("hello");
+                                      }));
+                                },
+                              )
+                            : Container();
+                      },
+                    ))
+                  ],
                 );
             },
           )),
