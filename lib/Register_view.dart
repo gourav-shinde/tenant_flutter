@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -47,6 +48,8 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/register""";
 }
 
 class RegisterState extends State<Register> {
+  bool _isSuccess=false;
+  bool _isloading=false;
   String response_output;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -62,9 +65,53 @@ class RegisterState extends State<Register> {
     // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
+      body: _isSuccess ?
+          Padding(
+            padding: EdgeInsets.all(32.0),
+            child: Container(
+              child:Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                SizedBox(
+                  height: 200,
+                  child: image,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  child: Center(
+                    child:Text("Activate Your account from Email"),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                FlatButton(
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  onPressed: () {
+                    print("pressed (pop)");
+                    Navigator.pop(context);
+                  },
+                  child: Text("Sign In"),
+                )
+              ],
+            ),)
+          )
+          :Padding(
           padding: EdgeInsets.all(32.0),
-          child: Form(
+          child: _isloading?
+          Padding(
+            padding: EdgeInsets.all(32),
+            child: Container(
+              child: Center(
+                child:CircularProgressIndicator(),
+              ),
+            ),
+          ):Form(
             // padding: EdgeInsets.all(32),
             child: ListView(
               children: <Widget>[
@@ -164,6 +211,9 @@ class RegisterState extends State<Register> {
                     textScaleFactor: 1.5,
                   ),
                   onPressed: () async {
+                    setState(() {
+                      _isloading=true;
+                    });
                     final String username = usernameController.text;
                     final String email = emailController.text;
                     final String password = passwordController.text;
@@ -172,14 +222,20 @@ class RegisterState extends State<Register> {
                         await registerOn(username, email, password, password2);
 
                     setState(() {
+                      _isloading=false;
                       response_output = response;
+                      if(response_output =="Activate your Account From Email"){
+                        setState(() {
+                          _isSuccess=true;
+                        });
+                      }
                     });
                   },
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                response_output == null ? Container() : Text(response_output),
+                response_output == null ? Container() : Text(response_output,style: TextStyle(color: Colors.red),),
                 FlatButton(
                   color: Colors.white,
                   textColor: Colors.black,
