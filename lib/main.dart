@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/Register_view.dart';
@@ -7,7 +8,11 @@ import 'package:tenant_manager/screens/change_password.dart';
 // screens
 import 'package:tenant_manager/screens/logged_sandbox.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      debug: true // optional: set false to disable printing logs to console
+      );
   runApp(MyApp());
 }
 

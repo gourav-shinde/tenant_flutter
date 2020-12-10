@@ -32,6 +32,10 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   intl: ^0.16.1
   shared_preferences: ^0.5.12+4
+  path_provider: ^1.6.24
+  permission_handler: ^5.0.1+1
+  flutter_downloader: ^1.5.2
+  
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tenant_manager/models/bill_model.dart';
 import 'package:tenant_manager/models/payment_model.dart';
 
@@ -86,6 +89,26 @@ class tenant_detail_state extends State<Tenant_detail> {
       appBar: AppBar(
         title: Text(tenant_instance.name),
         actions: [
+          FlatButton(
+              onPressed: () async {
+                final String url =
+                    "https://tenant-manager-arsenel.herokuapp.com/app/exporter/" +
+                        tenant_instance.id.toString();
+                final status = await Permission.storage.request();
+                if (status.isGranted) {
+                  final externalDir = await getExternalStorageDirectory();
+                  final id = await FlutterDownloader.enqueue(
+                      url: url,
+                      savedDir: externalDir.path,
+                      fileName:
+                          "Tenant " + tenant_instance.name.toString() + ".xls",
+                      showNotification: true,
+                      openFileFromNotification: true);
+                } else {
+                  print("denied");
+                }
+              },
+              child: Icon(Icons.download_outlined)),
           FlatButton(
               onPressed: () async {
                 print("edit pressed");

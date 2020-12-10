@@ -13,14 +13,15 @@ class Register extends StatefulWidget {
 }
 
 Future<String> registerOn(
-    String username, String email, String password, String password2) async {
+    String username, String email, String password, String password2,String mobile) async {
   final String LoginUrl = """
 https://tenant-manager-arsenel.herokuapp.com/account/user/register""";
   final response = await http.post(LoginUrl, body: {
     "username": username,
     "email": email,
     "password": password,
-    "password2": password2
+    "password2": password2,
+    "mobile_no":mobile
   });
 
   if (response.statusCode <= 202) {
@@ -50,9 +51,11 @@ https://tenant-manager-arsenel.herokuapp.com/account/user/register""";
 class RegisterState extends State<Register> {
   bool _isSuccess=false;
   bool _isloading=false;
+  bool _moberror=false;
   String response_output;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController mobileController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController Repassword1Controller = TextEditingController();
 
@@ -72,7 +75,7 @@ class RegisterState extends State<Register> {
               child:Column(
               children: [
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
                 SizedBox(
                   height: 200,
@@ -150,6 +153,20 @@ class RegisterState extends State<Register> {
                   height: 10,
                 ),
                 TextField(
+                  controller: mobileController,
+                  keyboardType: TextInputType.phone,
+                  decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.phone_android),
+                      labelText: "Google Pay Mobile no.",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      )),
+                ),
+                SizedBox(
+                  height: 10,
+                  child: _moberror?Text("Check mobile number",style: TextStyle(color: Colors.red),):Container(),
+                ),
+                TextField(
                   enableSuggestions: false,
                   autocorrect: false,
                   controller: passwordController,
@@ -218,10 +235,24 @@ class RegisterState extends State<Register> {
                     final String email = emailController.text;
                     final String password = passwordController.text;
                     final String password2 = Repassword1Controller.text;
-                    final String response =
-                        await registerOn(username, email, password, password2);
+                    final String mobile=mobileController.text;
+                    String response;
+                    if (mobile.length==10)
+                    {
+                                response = await registerOn(
+                                    username,
+                                    email,
+                                    password,
+                                    password2,
+                                    mobile);
+                    }
+                    else{
+                      setState(() {
 
-                    setState(() {
+                      });
+                    }
+
+                              setState(() {
                       _isloading=false;
                       response_output = response;
                       if(response_output =="Activate your Account From Email"){
