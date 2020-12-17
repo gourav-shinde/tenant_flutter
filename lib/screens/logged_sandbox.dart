@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tenant_manager/screens/add_tenant.dart';
+import 'package:tenant_manager/screens/payment_request.dart';
+import 'package:tenant_manager/screens/profile.dart';
 import 'package:tenant_manager/screens/tenant_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -59,6 +61,25 @@ https://tenant-manager-arsenel.herokuapp.com/app/tenant_views""";
 class TenantViewState extends State<TenantView> {
   String Token_saved;
   TenantViewState(this.Token_saved);
+  String get token_saved => Token_saved;
+  int _index = 1;
+  void onTapFunc(int index) {
+    setState(() {
+      _index = index;
+      if (_index == 0) {
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return profileView(token_saved);
+        }));
+      } else if (_index == 2) {
+        Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return PaymentRequestView(token_saved);
+        }));
+      }
+    });
+  }
+
   final TextEditingController searchController = TextEditingController();
   String searchString = "";
   resettoken() async {
@@ -170,6 +191,18 @@ class TenantViewState extends State<TenantView> {
             return AddTenantView(Token_saved);
           }));
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTapFunc,
+        currentIndex: 1,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.account_box), title: Text("Profile")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home), title: Text("Tenant")),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.payment), title: Text("Payment"))
+        ],
       ),
     );
   }
