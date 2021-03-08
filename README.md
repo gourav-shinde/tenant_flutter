@@ -8,6 +8,7 @@ This Application is designed for House owners/hostels,etc who give rooms for Ren
 
 - APP url: https://www.dropbox.com/s/p0g664jh7aveai7/tenant_manager_1.8.apk?dl=0
 - Website link: https://tenant-manager-arsenel.herokuapp.com/
+- Api for software development : https://tenant-manager-arsenel.herokuapp.com/app/api
 
 Latest added:
 - Download Excel sheet of data of tenant
