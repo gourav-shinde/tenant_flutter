@@ -14,7 +14,7 @@ This Application is designed for House owners/hostels,etc who give rooms for Ren
 
 - Currently the email functionalities is facing issues due to google policies of switching off email access after it is not used for few day..it needs to be activated manully.
 - Therefore if you register and do not receive email about account activation,please contact in issues page until we find a solution about it.
-- Test Login: **username:tester** **password:test@123**
+- Test Login: **username: tester** **password: test@123**
 
 ## Watch Section
 Latest added:
