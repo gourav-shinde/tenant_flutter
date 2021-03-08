@@ -17,8 +17,8 @@ Latest added:
 - Tenants can view their bills and payements on Website
 
 Contributers: 
-- Gaurav Shinde(gauravsanjayshinde@gmail.com) 
-- Shreyash Pawar(pawarshreyash2908@gmail.com) 
+- Gaurav Shinde(gauravsanjayshinde@gmail.com) : Backend Server,frontend,Rest API,Flutter API 
+- Shreyash Pawar(pawarshreyash2908@gmail.com) : Flutter App
 
 ## App Functionality
 
