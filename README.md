@@ -40,7 +40,7 @@ Contributers:
 
 ##Web Functionality
 
--Tenants can view their bills and payements on Website
+-Tenants can view their bills and payments on Website
 -Tenants can create a Payment request to Houseowner by sending the snapshot of digital payment made.
 
 ## Additional Functionality
