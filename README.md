@@ -12,7 +12,7 @@ This Application is designed for House owners/hostels,etc who give rooms for Ren
 
 ## Note
 
-- Currently the email functionalities is facing issues due to google policies of switching off email access after it is not used for few day..it needs to be activated manully.
+- CURRENTLY THE EMAIL FUNCTIONALITIES IS FACING ISSUES DUE TO GOOGLE POLICIES OF SWITCHING OFF EMAIL ACCESS AFTER IT IS NOT USED FOR FEW DAYS..IT NEEDS TO BE ACTIVATED MANULLY
 - Therefore if you register and do not receive email about account activation,please contact in issues page until we find a solution about it.
 - Test Login: **username: tester** **password: test@123**
 
